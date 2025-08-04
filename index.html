@@ -234,6 +234,19 @@
             color: #2c3e50;
         }
 
+        .service-notification {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 4px solid #FF6B35;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .service-notification strong {
+            color: #FF6B35;
+        }
+
         .customer-actions {
             margin-top: 20px;
             display: flex;
@@ -546,10 +559,33 @@
         function getServiceStatus(customer) {
             const days = getDaysUntilNextService(customer.lastService, customer.serviceFrequency);
             
-            if (days === null) return { status: 'green', text: 'No Service Date', days: null };
-            if (days < 0) return { status: 'red', text: 'Overdue', days: Math.abs(days) };
-            if (days <= 30) return { status: 'yellow', text: 'Due Soon', days: days };
-            return { status: 'green', text: 'Current', days: days };
+            if (days === null) return { status: 'green', text: 'No Service Date', days: null, notification: 'Set last service date' };
+            
+            if (days < 0) {
+                const overdueDays = Math.abs(days);
+                return { 
+                    status: 'red', 
+                    text: 'Overdue', 
+                    days: overdueDays, 
+                    notification: `${overdueDays} day${overdueDays > 1 ? 's' : ''} overdue!` 
+                };
+            }
+            
+            if (days <= 30) {
+                return { 
+                    status: 'yellow', 
+                    text: 'Due Soon', 
+                    days: days, 
+                    notification: `${days} day${days > 1 ? 's' : ''} until service due` 
+                };
+            }
+            
+            return { 
+                status: 'green', 
+                text: 'Current', 
+                days: days, 
+                notification: `${days} day${days > 1 ? 's' : ''} until next service` 
+            };
         }
 
         // Calculate service length
@@ -574,14 +610,26 @@
             const status = getServiceStatus(customer);
             const serviceLength = getServiceLength(customer.startDate);
             
-            let statusText = status.text;
-            if (status.days !== null) {
-                statusText += status.status === 'red' ? ` (${status.days} days)` : ` (${status.days} days)`;
+            // Calculate next service date
+            let nextServiceDate = '';
+            if (customer.lastService && status.days !== null) {
+                const last = new Date(customer.lastService);
+                const frequencyDays = {
+                    'monthly': 30,
+                    'every-2-months': 60,
+                    'quarterly': 90,
+                    'every-4-months': 120,
+                    'semi-annual': 180,
+                    'annual': 365
+                };
+                const intervalDays = frequencyDays[customer.serviceFrequency] || 90;
+                const nextService = new Date(last.getTime() + (intervalDays * 24 * 60 * 60 * 1000));
+                nextServiceDate = nextService.toLocaleDateString();
             }
             
             return `
                 <div class="customer-card ${status.status === 'yellow' ? 'due-soon' : status.status === 'red' ? 'overdue' : ''}">
-                    <div class="status-badge ${status.status}">${statusText}</div>
+                    <div class="status-badge ${status.status}">${status.text}</div>
                     <div class="customer-info">
                         <h3>${customer.businessName}</h3>
                         <p><strong>Contact:</strong> ${customer.contactName}</p>
@@ -592,6 +640,8 @@
                         <p><strong>Service Frequency:</strong> ${customer.serviceFrequency.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
                         <p><strong>Customer Since:</strong> ${serviceLength}</p>
                         ${customer.lastService ? `<p><strong>Last Service:</strong> ${new Date(customer.lastService).toLocaleDateString()}</p>` : ''}
+                        ${nextServiceDate ? `<p><strong>Next Service Due:</strong> ${nextServiceDate}</p>` : ''}
+                        <p class="service-notification"><strong>⏰ ${status.notification}</strong></p>
                         ${customer.notes ? `<p><strong>Notes:</strong> ${customer.notes}</p>` : ''}
                     </div>
                     <div class="customer-actions">
