@@ -726,14 +726,35 @@
                         <option value="red">🚨 Overdue</option>
                     </select>
                     <select class="filter-select" id="businessTypeFilter">
-                        <option value="">All Business Types</option>
-                        <option value="mom-pop">Mom & Pop Restaurant</option>
-                        <option value="fast-food">Fast Food Chain</option>
-                        <option value="casual-dining">Casual Dining</option>
-                        <option value="fine-dining">Fine Dining</option>
-                        <option value="hotel">Hotel/Resort</option>
-                        <option value="school">School</option>
-                        <option value="other">Other</option>
+                        <option value="">All Business Structures</option>
+                        <option value="standalone-restaurant">Standalone Restaurant</option>
+                        <option value="strip-mall">Strip Mall</option>
+                        <option value="shopping-center">Shopping Center</option>
+                        <option value="mall-food-court">Mall Food Court</option>
+                        <option value="high-rise-building">High-Rise Building</option>
+                        <option value="food-truck">Food Truck</option>
+                        <option value="hotel-restaurant">Hotel Restaurant</option>
+                        <option value="hospital-cafeteria">Hospital/Medical</option>
+                        <option value="school-cafeteria">School</option>
+                        <option value="corporate-cafeteria">Corporate</option>
+                        <option value="other-structure">Other</option>
+                    </select>
+                    <select class="filter-select" id="cuisineTypeFilter">
+                        <option value="">All Cuisine Types</option>
+                        <option value="american">American</option>
+                        <option value="bbq">BBQ</option>
+                        <option value="burgers-fries">Burgers & Fries</option>
+                        <option value="pizza">Pizza</option>
+                        <option value="italian">Italian</option>
+                        <option value="chinese">Chinese</option>
+                        <option value="japanese">Japanese/Sushi</option>
+                        <option value="mexican">Mexican</option>
+                        <option value="caribbean">Caribbean</option>
+                        <option value="cuban">Cuban</option>
+                        <option value="seafood">Seafood</option>
+                        <option value="sports-bar">Sports Bar/Tavern</option>
+                        <option value="fusion">Fusion</option>
+                        <option value="other-cuisine">Other</option>
                     </select>
                 </div>
                 <div id="allCustomers" class="customer-grid"></div>
@@ -794,22 +815,76 @@
                         <h2>Business Details</h2>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="businessType">Business Type *</label>
+                                <label for="businessType">Business Structure *</label>
                                 <select id="businessType" required>
-                                    <option value="">Select Business Type</option>
-                                    <option value="mom-pop">Mom & Pop Restaurant</option>
-                                    <option value="fast-food">Fast Food Chain</option>
-                                    <option value="casual-dining">Casual Dining</option>
-                                    <option value="fine-dining">Fine Dining</option>
+                                    <option value="">Select Business Structure</option>
+                                    <option value="standalone-restaurant">Standalone Restaurant</option>
+                                    <option value="strip-mall">Strip Mall Location</option>
+                                    <option value="shopping-center">Shopping Center</option>
+                                    <option value="mall-food-court">Mall Food Court</option>
+                                    <option value="high-rise-building">High-Rise Building</option>
                                     <option value="food-truck">Food Truck/Trailer</option>
-                                    <option value="hotel">Hotel/Resort</option>
-                                    <option value="hospital">Hospital/Medical</option>
-                                    <option value="church">Church/Religious</option>
-                                    <option value="school">School/Educational</option>
-                                    <option value="corporate">Corporate Cafeteria</option>
-                                    <option value="other">Other</option>
+                                    <option value="hotel-restaurant">Hotel Restaurant</option>
+                                    <option value="resort-dining">Resort Dining</option>
+                                    <option value="hospital-cafeteria">Hospital/Medical Facility</option>
+                                    <option value="school-cafeteria">School Cafeteria</option>
+                                    <option value="corporate-cafeteria">Corporate Cafeteria</option>
+                                    <option value="church-kitchen">Church/Community Kitchen</option>
+                                    <option value="catering-facility">Catering Facility</option>
+                                    <option value="sports-venue">Sports Venue/Stadium</option>
+                                    <option value="airport-dining">Airport Dining</option>
+                                    <option value="gas-station">Gas Station/Convenience</option>
+                                    <option value="other-structure">Other Structure</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="cuisineType">Cuisine/Theme Type</label>
+                                <select id="cuisineType">
+                                    <option value="">Select Cuisine Type (Optional)</option>
+                                    <option value="american">American</option>
+                                    <option value="bbq">BBQ/Smokehouse</option>
+                                    <option value="burgers-fries">Burgers & Fries</option>
+                                    <option value="pizza">Pizza</option>
+                                    <option value="italian">Italian</option>
+                                    <option value="chinese">Chinese</option>
+                                    <option value="japanese">Japanese/Sushi</option>
+                                    <option value="thai">Thai</option>
+                                    <option value="vietnamese">Vietnamese</option>
+                                    <option value="korean">Korean</option>
+                                    <option value="indian">Indian</option>
+                                    <option value="mexican">Mexican</option>
+                                    <option value="latin-american">Latin American</option>
+                                    <option value="caribbean">Caribbean</option>
+                                    <option value="cuban">Cuban</option>
+                                    <option value="haitian">Haitian</option>
+                                    <option value="jamaican">Jamaican</option>
+                                    <option value="peruvian">Peruvian</option>
+                                    <option value="colombian">Colombian</option>
+                                    <option value="argentinian">Argentinian</option>
+                                    <option value="brazilian">Brazilian</option>
+                                    <option value="mediterranean">Mediterranean</option>
+                                    <option value="greek">Greek</option>
+                                    <option value="middle-eastern">Middle Eastern</option>
+                                    <option value="french">French</option>
+                                    <option value="seafood">Seafood</option>
+                                    <option value="steakhouse">Steakhouse</option>
+                                    <option value="deli-sandwiches">Deli/Sandwiches</option>
+                                    <option value="bakery-cafe">Bakery/Cafe</option>
+                                    <option value="coffee-shop">Coffee Shop</option>
+                                    <option value="ice-cream">Ice Cream/Desserts</option>
+                                    <option value="sports-bar">Sports Bar/Tavern</option>
+                                    <option value="pub-gastropub">Pub/Gastropub</option>
+                                    <option value="nightclub">Nightclub/Lounge</option>
+                                    <option value="fusion">Fusion</option>
+                                    <option value="healthy-organic">Healthy/Organic</option>
+                                    <option value="vegan-vegetarian">Vegan/Vegetarian</option>
+                                    <option value="buffet">Buffet</option>
+                                    <option value="cafeteria-style">Cafeteria Style</option>
+                                    <option value="other-cuisine">Other Cuisine</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group">
                                 <label for="serviceFrequency">Service Frequency *</label>
                                 <select id="serviceFrequency" required>
@@ -821,6 +896,9 @@
                                     <option value="semi-annual">Every 6 Months</option>
                                     <option value="annual">Once Per Year</option>
                                 </select>
+                            </div>
+                            <div class="form-group">
+                                <!-- Empty for now, can add more fields later -->
                             </div>
                         </div>
                     </div>
@@ -1022,7 +1100,8 @@
                         ${customer.contact_email ? `<p><strong>📧 Email:</strong> ${customer.contact_email}</p>` : ''}
                         <p><strong>📍 Address:</strong> ${customer.address}${customer.suite_number ? `, ${customer.suite_number}` : ''}</p>
                         <p><strong>🏙️ City:</strong> ${customer.city}, ${customer.state} ${customer.zip_code}</p>
-                        <p><strong>🏪 Type:</strong> ${formatBusinessType(customer.business_type)}</p>
+                        <p><strong>🏪 Structure:</strong> ${formatBusinessType(customer.business_type)}</p>
+                        ${customer.cuisine_type ? `<p><strong>🍽️ Cuisine:</strong> ${formatBusinessType(customer.cuisine_type)}</p>` : ''}
                         <p><strong>🔄 Frequency:</strong> ${formatBusinessType(customer.service_frequency)}</p>
                         <p><strong>⏱️ Customer Since:</strong> ${serviceLength}</p>
                         ${customer.last_service ? `<p><strong>🧽 Last Service:</strong> ${new Date(customer.last_service).toLocaleDateString()}</p>` : ''}
@@ -1123,6 +1202,13 @@
                     customer.business_type === businessTypeFilter
                 );
             }
+            
+            const cuisineTypeFilter = document.getElementById('cuisineTypeFilter').value;
+            if (cuisineTypeFilter) {
+                filteredCustomers = filteredCustomers.filter(customer => 
+                    customer.cuisine_type === cuisineTypeFilter
+                );
+            }
 
             filteredCustomers.sort((a, b) => {
                 const statusA = getServiceStatus(a);
@@ -1192,6 +1278,7 @@
                     state: document.getElementById('state').value.trim(),
                     zip_code: document.getElementById('zipCode').value.trim(),
                     business_type: document.getElementById('businessType').value,
+                    cuisine_type: document.getElementById('cuisineType').value || null,
                     service_frequency: document.getElementById('serviceFrequency').value,
                     start_date: document.getElementById('startDate').value,
                     last_service: document.getElementById('lastService').value || null,
@@ -1244,6 +1331,7 @@
             document.getElementById('state').value = 'FL';
             document.getElementById('zipCode').value = '';
             document.getElementById('businessType').value = '';
+            document.getElementById('cuisineType').value = '';
             document.getElementById('serviceFrequency').value = '';
             document.getElementById('startDate').value = '';
             document.getElementById('lastService').value = '';
@@ -1284,6 +1372,7 @@
             document.getElementById('state').value = customer.state || 'FL';
             document.getElementById('zipCode').value = customer.zip_code || '';
             document.getElementById('businessType').value = customer.business_type || '';
+            document.getElementById('cuisineType').value = customer.cuisine_type || '';
             document.getElementById('serviceFrequency').value = customer.service_frequency || '';
             document.getElementById('startDate').value = customer.start_date || '';
             document.getElementById('lastService').value = customer.last_service || '';
@@ -1353,6 +1442,7 @@
             document.getElementById('searchInput').addEventListener('input', displayAllCustomers);
             document.getElementById('statusFilter').addEventListener('change', displayAllCustomers);
             document.getElementById('businessTypeFilter').addEventListener('change', displayAllCustomers);
+            document.getElementById('cuisineTypeFilter').addEventListener('change', displayAllCustomers);
 
             initializeApp();
         });
