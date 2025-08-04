@@ -757,7 +757,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="contactPhone">Phone Number *</label>
-                                <input type="tel" id="contactPhone" required placeholder="(555) 123-4567">
+                                <input type="tel" id="contactPhone" required placeholder="(305) 123-4567" pattern="[\(\)\s\-0-9]{10,17}" minlength="10" maxlength="17" title="Please enter a valid phone number">
                             </div>
                             <div class="form-group">
                                 <label for="contactEmail">Email Address</label>
@@ -781,11 +781,11 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="state">State *</label>
-                                <input type="text" id="state" required placeholder="FL">
+                                <input type="text" id="state" required value="FL" readonly style="background-color: #f8f9fa; color: #666;">
                             </div>
                             <div class="form-group">
                                 <label for="zipCode">ZIP Code *</label>
-                                <input type="text" id="zipCode" required placeholder="12345">
+                                <input type="tel" id="zipCode" required placeholder="33139" pattern="[0-9]{5}(-[0-9]{4})?" minlength="5" maxlength="10" title="Please enter a valid ZIP code (12345 or 12345-6789)">
                             </div>
                         </div>
                     </div>
@@ -1399,6 +1399,8 @@
             document.getElementById('customerForm').reset();
             currentEditingId = null;
             document.getElementById('submitBtn').textContent = '💾 Save Customer';
+            // Reset Florida as default state after form reset
+            document.getElementById('state').value = 'FL';
         }
 
         async function markServiced(customerId) {
@@ -1484,7 +1486,51 @@
             }
         }
 
-        async function initializeApp() {
+        // Phone number formatting
+        function formatPhoneNumber(value) {
+            // Remove all non-digits
+            const phoneNumber = value.replace(/\D/g, '');
+            
+            // Format as (XXX) XXX-XXXX
+            if (phoneNumber.length >= 6) {
+                return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+            } else if (phoneNumber.length >= 3) {
+                return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+            } else {
+                return phoneNumber;
+            }
+        }
+
+        // ZIP code formatting
+        function formatZipCode(value) {
+            // Remove all non-digits and hyphens
+            const zipCode = value.replace(/[^\d-]/g, '');
+            
+            // Format as XXXXX or XXXXX-XXXX
+            if (zipCode.length > 5 && !zipCode.includes('-')) {
+                return `${zipCode.slice(0, 5)}-${zipCode.slice(5, 9)}`;
+            }
+            return zipCode;
+        }
+
+        function setupFormValidation() {
+            // Phone number formatting and validation
+            const phoneInput = document.getElementById('contactPhone');
+            phoneInput.addEventListener('input', function(e) {
+                const formatted = formatPhoneNumber(e.target.value);
+                e.target.value = formatted;
+            });
+
+            // ZIP code formatting and validation
+            const zipInput = document.getElementById('zipCode');
+            zipInput.addEventListener('input', function(e) {
+                const formatted = formatZipCode(e.target.value);
+                e.target.value = formatted;
+            });
+
+            // Set Florida as default state
+            document.getElementById('state').value = 'FL';
+        }
             showLoading();
             
             try {
@@ -1513,6 +1559,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            // Setup form validation and formatting
+            setupFormValidation();
+
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', (e) => {
                     showTab(e.target.dataset.tab);
