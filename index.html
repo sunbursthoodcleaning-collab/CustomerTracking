@@ -879,6 +879,33 @@
             }, 4000);
         }
 
+        // Phone number formatting
+        function formatPhoneNumber(value) {
+            // Remove all non-digits
+            const phoneNumber = value.replace(/\D/g, '');
+            
+            // Format as (XXX) XXX-XXXX
+            if (phoneNumber.length >= 6) {
+                return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+            } else if (phoneNumber.length >= 3) {
+                return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+            } else {
+                return phoneNumber;
+            }
+        }
+
+        // ZIP code formatting
+        function formatZipCode(value) {
+            // Remove all non-digits and hyphens
+            const zipCode = value.replace(/[^\d-]/g, '');
+            
+            // Format as XXXXX or XXXXX-XXXX
+            if (zipCode.length > 5 && !zipCode.includes('-')) {
+                return `${zipCode.slice(0, 5)}-${zipCode.slice(5, 9)}`;
+            }
+            return zipCode;
+        }
+
         async function initSupabase() {
             try {
                 if (typeof window.supabase === 'undefined') {
@@ -1440,7 +1467,7 @@
             document.getElementById('address').value = customer.address || '';
             document.getElementById('suiteNumber').value = customer.suite_number || '';
             document.getElementById('city').value = customer.city || '';
-            document.getElementById('state').value = customer.state || '';
+            document.getElementById('state').value = customer.state || 'FL';
             document.getElementById('zipCode').value = customer.zip_code || '';
             document.getElementById('businessType').value = customer.business_type || '';
             document.getElementById('serviceFrequency').value = customer.service_frequency || '';
@@ -1486,51 +1513,7 @@
             }
         }
 
-        // Phone number formatting
-        function formatPhoneNumber(value) {
-            // Remove all non-digits
-            const phoneNumber = value.replace(/\D/g, '');
-            
-            // Format as (XXX) XXX-XXXX
-            if (phoneNumber.length >= 6) {
-                return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
-            } else if (phoneNumber.length >= 3) {
-                return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-            } else {
-                return phoneNumber;
-            }
-        }
-
-        // ZIP code formatting
-        function formatZipCode(value) {
-            // Remove all non-digits and hyphens
-            const zipCode = value.replace(/[^\d-]/g, '');
-            
-            // Format as XXXXX or XXXXX-XXXX
-            if (zipCode.length > 5 && !zipCode.includes('-')) {
-                return `${zipCode.slice(0, 5)}-${zipCode.slice(5, 9)}`;
-            }
-            return zipCode;
-        }
-
-        function setupFormValidation() {
-            // Phone number formatting and validation
-            const phoneInput = document.getElementById('contactPhone');
-            phoneInput.addEventListener('input', function(e) {
-                const formatted = formatPhoneNumber(e.target.value);
-                e.target.value = formatted;
-            });
-
-            // ZIP code formatting and validation
-            const zipInput = document.getElementById('zipCode');
-            zipInput.addEventListener('input', function(e) {
-                const formatted = formatZipCode(e.target.value);
-                e.target.value = formatted;
-            });
-
-            // Set Florida as default state
-            document.getElementById('state').value = 'FL';
-        }
+        async function initializeApp() {
             showLoading();
             
             try {
@@ -1559,8 +1542,22 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Setup form validation and formatting
-            setupFormValidation();
+            // Setup phone number formatting
+            const phoneInput = document.getElementById('contactPhone');
+            phoneInput.addEventListener('input', function(e) {
+                const formatted = formatPhoneNumber(e.target.value);
+                e.target.value = formatted;
+            });
+
+            // Setup ZIP code formatting
+            const zipInput = document.getElementById('zipCode');
+            zipInput.addEventListener('input', function(e) {
+                const formatted = formatZipCode(e.target.value);
+                e.target.value = formatted;
+            });
+
+            // Set Florida as default state
+            document.getElementById('state').value = 'FL';
 
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', (e) => {
