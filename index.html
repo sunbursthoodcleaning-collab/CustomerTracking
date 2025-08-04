@@ -837,37 +837,13 @@
             }
         }
 
-        /* Hide main app initially */
+        /* Hide main app initially - remove this section */
         .main-app {
-            display: none;
-        }
-
-        .main-app.authenticated {
             display: block;
         }
     </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div class="login-container" id="loginScreen">
-        <div class="login-card">
-            <div class="login-header">
-                <h1>🏢 SUNBURST Hood Cleaning</h1>
-                <p>Customer Management System</p>
-            </div>
-            <form class="login-form" id="loginForm">
-                <div id="errorMessage" class="error-message" style="display: none;"></div>
-                <div class="form-group">
-                    <label for="adminPin">Admin PIN</label>
-                    <input type="tel" id="adminPin" required placeholder="Enter 6-digit PIN" maxlength="6" pattern="[0-9]{6}" title="Please enter a valid 6-digit PIN">
-                </div>
-                <button type="submit" class="login-btn" id="loginBtn">
-                    🔐 Access Dashboard
-                </button>
-            </form>
-        </div>
-    </div>
-
     <!-- Main Application -->
     <div class="main-app" id="mainApp">
         <div class="loading-overlay" id="loadingOverlay">
@@ -878,7 +854,6 @@
 
         <div class="container">
             <div class="header">
-                <button class="logout-btn" onclick="logout()">🚪 Logout</button>
                 <h1>🏢 SUNBURST Hood Cleaning, LLC</h1>
                 <p>Professional Customer Management System</p>
             </div>
@@ -1055,86 +1030,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Authentication Configuration
-        const ADMIN_PIN = '123098'; // Change this to your desired PIN
-        const SESSION_KEY = 'sunburst_admin_session';
-
         // Application variables
         let customers = [];
         let supabase = null;
         let currentEditingId = null;
         let isDemo = false;
-
-        // Authentication functions
-        function checkAuthentication() {
-            const session = sessionStorage.getItem(SESSION_KEY);
-            if (session === 'authenticated') {
-                showMainApp();
-                return true;
-            }
-            showLoginScreen();
-            return false;
-        }
-
-        function showLoginScreen() {
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('mainApp').classList.remove('authenticated');
-        }
-
-        function showMainApp() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainApp').classList.add('authenticated');
-        }
-
-        function login(pin) {
-            if (pin === ADMIN_PIN) {
-                sessionStorage.setItem(SESSION_KEY, 'authenticated');
-                showMainApp();
-                showNotification('Welcome to SUNBURST Customer Management! 🎉', 'success');
-                initializeApp();
-                return true;
-            }
-            return false;
-        }
-
-        function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                sessionStorage.removeItem(SESSION_KEY);
-                showLoginScreen();
-                showNotification('Logged out successfully', 'success');
-            }
-        }
-
-        // Login form handler
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const pin = document.getElementById('adminPin').value;
-            const errorDiv = document.getElementById('errorMessage');
-            const loginBtn = document.getElementById('loginBtn');
-            
-            loginBtn.textContent = '🔐 Authenticating...';
-            loginBtn.disabled = true;
-            
-            // Simple PIN check - no timeout, direct comparison
-            if (pin === '123098') {
-                // Success - login
-                errorDiv.style.display = 'none';
-                sessionStorage.setItem('sunburst_admin_session', 'authenticated');
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainApp').classList.add('authenticated');
-                showNotification('Welcome to SUNBURST Customer Management! 🎉', 'success');
-                initializeApp();
-            } else {
-                // Failed - show error
-                errorDiv.textContent = `❌ Wrong PIN. Try: 123098 (You entered: "${pin}")`;
-                errorDiv.style.display = 'block';
-                document.getElementById('adminPin').value = '';
-            }
-            
-            loginBtn.textContent = '🔐 Access Dashboard';
-            loginBtn.disabled = false;
-        });
 
         // Utility functions
         function showLoading() {
