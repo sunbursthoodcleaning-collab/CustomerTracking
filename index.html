@@ -1109,18 +1109,27 @@
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const pin = document.getElementById('adminPin').value;
+            const pin = document.getElementById('adminPin').value.trim();
             const errorDiv = document.getElementById('errorMessage');
             const loginBtn = document.getElementById('loginBtn');
+            
+            console.log('Entered PIN:', pin); // Debug log
+            console.log('Expected PIN:', ADMIN_PIN); // Debug log
             
             loginBtn.textContent = '🔐 Authenticating...';
             loginBtn.disabled = true;
             
             setTimeout(() => {
-                if (login(pin)) {
+                if (pin === ADMIN_PIN) {
+                    console.log('PIN match - logging in'); // Debug log
                     errorDiv.style.display = 'none';
+                    sessionStorage.setItem(SESSION_KEY, 'authenticated');
+                    showMainApp();
+                    showNotification('Welcome to SUNBURST Customer Management! 🎉', 'success');
+                    initializeApp();
                 } else {
-                    errorDiv.textContent = '❌ Invalid PIN. Please try again.';
+                    console.log('PIN mismatch'); // Debug log
+                    errorDiv.textContent = `❌ Invalid PIN. Please try again. (You entered: ${pin})`;
                     errorDiv.style.display = 'block';
                     document.getElementById('adminPin').value = '';
                 }
