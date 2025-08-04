@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUNBURST Hood Cleaning - Customer Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #f0f0f0;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 10px 10px 0 0;
+            margin-right: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: #FF6B35;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Add Customer Form Styles */
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #FF6B35;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #FF6B35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
+        }
+
+        /* Customer List Styles */
+        .customer-grid {
+            display: grid;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .customer-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #e1e8ed;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .customer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .customer-card.due-soon {
+            border-left-color: #ffc107;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffffff 100%);
+        }
+
+        .customer-card.due-now {
+            border-left-color: #fd7e14;
+            background: linear-gradient(135deg, #fff4e6 0%, #ffffff 100%);
+        }
+
+        .customer-card.overdue {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #f8d7da 0%, #ffffff 100%);
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.green {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.yellow {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.red {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .customer-info h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .customer-info p {
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .customer-info strong {
+            color: #2c3e50;
+        }
+
+        .customer-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .search-filter {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-select {
+            min-width: 150px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #FF6B35;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #FF6B35;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-filter {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .customer-actions {
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>SUNBURST Hood Cleaning, LLC</h1>
+            <p>Customer Management System</p>
+        </div>
+
+        <div class="main-content">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('dashboard')">Dashboard</button>
+                <button class="tab" onclick="showTab('customers')">All Customers</button>
+                <button class="tab" onclick="showTab('add-customer')">Add Customer</button>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalCustomers">0</div>
+                        <div class="stat-label">Total Customers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="dueSoon">0</div>
+                        <div class="stat-label">Due in 30 Days</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="dueNow">0</div>
+                        <div class="stat-label">Due This Month</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="overdue">0</div>
+                        <div class="stat-label">Overdue</div>
+                    </div>
+                </div>
+
+                <h2 style="margin-bottom: 20px; color: #2c3e50;">Urgent Attention Needed</h2>
+                <div id="urgentCustomers" class="customer-grid"></div>
+            </div>
+
+            <!-- All Customers Tab -->
+            <div id="customers" class="tab-content">
+                <div class="search-filter">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search customers...">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="green">Due in 30+ Days</option>
+                        <option value="yellow">Due in 30 Days</option>
+                        <option value="red">Overdue</option>
+                    </select>
+                    <select class="filter-select" id="businessTypeFilter">
+                        <option value="">All Business Types</option>
+                        <option value="mom-pop">Mom & Pop Restaurant</option>
+                        <option value="fast-food">Fast Food Chain</option>
+                        <option value="casual-dining">Casual Dining</option>
+                        <option value="fine-dining">Fine Dining</option>
+                        <option value="hotel">Hotel/Resort</option>
+                        <option value="school">School</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div id="allCustomers" class="customer-grid"></div>
+            </div>
+
+            <!-- Add Customer Tab -->
+            <div id="add-customer" class="tab-content">
+                <form id="customerForm">
+                    <div class="form-section">
+                        <h2 style="margin-bottom: 20px; color: #2c3e50;">Basic Information</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="businessName">Business Name *</label>
+                                <input type="text" id="businessName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactName">Contact Name *</label>
+                                <input type="text" id="contactName" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="contactPhone">Phone Number *</label>
+                                <input type="tel" id="contactPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email</label>
+                                <input type="email" id="contactEmail">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Street Address *</label>
+                            <input type="text" id="address" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="suiteNumber">Suite/Unit Number</label>
+                                <input type="text" id="suiteNumber">
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="state">State *</label>
+                                <input type="text" id="state" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="zipCode">ZIP Code *</label>
+                                <input type="text" id="zipCode" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2 style="margin-bottom: 20px; color: #2c3e50;">Business Details</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="businessType">Business Type *</label>
+                                <select id="businessType" required>
+                                    <option value="">Select Business Type</option>
+                                    <option value="mom-pop">Mom & Pop Restaurant</option>
+                                    <option value="fast-food">Fast Food Chain</option>
+                                    <option value="casual-dining">Casual Dining</option>
+                                    <option value="fine-dining">Fine Dining</option>
+                                    <option value="food-truck">Food Truck/Trailer</option>
+                                    <option value="hotel">Hotel/Resort</option>
+                                    <option value="hospital">Hospital/Medical</option>
+                                    <option value="church">Church/Religious</option>
+                                    <option value="school">School/Educational</option>
+                                    <option value="corporate">Corporate Cafeteria</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="serviceFrequency">Service Frequency *</label>
+                                <select id="serviceFrequency" required>
+                                    <option value="">Select Frequency</option>
+                                    <option value="monthly">Every Month</option>
+                                    <option value="every-2-months">Every 2 Months</option>
+                                    <option value="quarterly">Every 3 Months</option>
+                                    <option value="every-4-months">Every 4 Months</option>
+                                    <option value="semi-annual">Every 6 Months</option>
+                                    <option value="annual">Once Per Year</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2 style="margin-bottom: 20px; color: #2c3e50;">Service History</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="startDate">Service Start Date *</label>
+                                <input type="date" id="startDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastService">Last Service Date</label>
+                                <input type="date" id="lastService">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Additional Notes</label>
+                            <textarea id="notes" rows="3" placeholder="Special requirements, access details, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 30px;">
+                        <button type="submit" class="btn">Add Customer</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm()" style="margin-left: 15px;">Clear Form</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Customer data storage
+        let customers = JSON.parse(localStorage.getItem('hoodCustomers') || '[]');
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Refresh data if needed
+            if (tabName === 'dashboard') {
+                updateDashboard();
+            } else if (tabName === 'customers') {
+                displayAllCustomers();
+            }
+        }
+
+        // Calculate days until next service
+        function getDaysUntilNextService(lastServiceDate, frequency) {
+            if (!lastServiceDate) return null;
+            
+            const last = new Date(lastServiceDate);
+            const today = new Date();
+            
+            // Calculate frequency in days
+            const frequencyDays = {
+                'monthly': 30,
+                'every-2-months': 60,
+                'quarterly': 90,
+                'every-4-months': 120,
+                'semi-annual': 180,
+                'annual': 365
+            };
+            
+            const intervalDays = frequencyDays[frequency] || 90;
+            const nextService = new Date(last.getTime() + (intervalDays * 24 * 60 * 60 * 1000));
+            const timeDiff = nextService.getTime() - today.getTime();
+            const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            
+            return daysDiff;
+        }
+
+        // Get service status
+        function getServiceStatus(customer) {
+            const days = getDaysUntilNextService(customer.lastService, customer.serviceFrequency);
+            
+            if (days === null) return { status: 'green', text: 'No Service Date', days: null };
+            if (days < 0) return { status: 'red', text: 'Overdue', days: Math.abs(days) };
+            if (days <= 30) return { status: 'yellow', text: 'Due Soon', days: days };
+            return { status: 'green', text: 'Current', days: days };
+        }
+
+        // Calculate service length
+        function getServiceLength(startDate) {
+            if (!startDate) return 'Unknown';
+            
+            const start = new Date(startDate);
+            const today = new Date();
+            const diffTime = Math.abs(today - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays < 30) return `${diffDays} days`;
+            if (diffDays < 365) return `${Math.floor(diffDays / 30)} months`;
+            
+            const years = Math.floor(diffDays / 365);
+            const months = Math.floor((diffDays % 365) / 30);
+            return `${years} year${years > 1 ? 's' : ''}${months > 0 ? `, ${months} month${months > 1 ? 's' : ''}` : ''}`;
+        }
+
+        // Create customer card HTML
+        function createCustomerCard(customer) {
+            const status = getServiceStatus(customer);
+            const serviceLength = getServiceLength(customer.startDate);
+            
+            let statusText = status.text;
+            if (status.days !== null) {
+                statusText += status.status === 'red' ? ` (${status.days} days)` : ` (${status.days} days)`;
+            }
+            
+            return `
+                <div class="customer-card ${status.status === 'yellow' ? 'due-soon' : status.status === 'red' ? 'overdue' : ''}">
+                    <div class="status-badge ${status.status}">${statusText}</div>
+                    <div class="customer-info">
+                        <h3>${customer.businessName}</h3>
+                        <p><strong>Contact:</strong> ${customer.contactName}</p>
+                        <p><strong>Phone:</strong> ${customer.contactPhone}</p>
+                        <p><strong>Address:</strong> ${customer.address}${customer.suiteNumber ? `, ${customer.suiteNumber}` : ''}</p>
+                        <p><strong>City:</strong> ${customer.city}, ${customer.state} ${customer.zipCode}</p>
+                        <p><strong>Business Type:</strong> ${customer.businessType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
+                        <p><strong>Service Frequency:</strong> ${customer.serviceFrequency.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}</p>
+                        <p><strong>Customer Since:</strong> ${serviceLength}</p>
+                        ${customer.lastService ? `<p><strong>Last Service:</strong> ${new Date(customer.lastService).toLocaleDateString()}</p>` : ''}
+                        ${customer.notes ? `<p><strong>Notes:</strong> ${customer.notes}</p>` : ''}
+                    </div>
+                    <div class="customer-actions">
+                        <button class="btn btn-small" onclick="editCustomer(${customer.id})">Edit</button>
+                        <button class="btn btn-small" onclick="markServiced(${customer.id})">Mark Serviced</button>
+                        <button class="btn btn-secondary btn-small" onclick="deleteCustomer(${customer.id})">Delete</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            const stats = {
+                total: customers.length,
+                dueSoon: 0,
+                dueNow: 0,
+                overdue: 0
+            };
+            
+            const urgentCustomers = [];
+            
+            customers.forEach(customer => {
+                const status = getServiceStatus(customer);
+                if (status.status === 'yellow') {
+                    stats.dueSoon++;
+                    urgentCustomers.push(customer);
+                } else if (status.status === 'red') {
+                    stats.overdue++;
+                    urgentCustomers.push(customer);
+                }
+            });
+            
+            // Update stats
+            document.getElementById('totalCustomers').textContent = stats.total;
+            document.getElementById('dueSoon').textContent = stats.dueSoon;
+            document.getElementById('dueNow').textContent = stats.dueSoon; // Using dueSoon for "Due This Month"
+            document.getElementById('overdue').textContent = stats.overdue;
+            
+            // Update urgent customers
+            const urgentContainer = document.getElementById('urgentCustomers');
+            if (urgentCustomers.length === 0) {
+                urgentContainer.innerHTML = '<p style="text-align: center; color: #666; font-style: italic; padding: 40px;">All customers are current! 🎉</p>';
+            } else {
+                urgentContainer.innerHTML = urgentCustomers.map(createCustomerCard).join('');
+            }
+        }
+
+        // Display all customers
+        function displayAllCustomers() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const businessTypeFilter = document.getElementById('businessTypeFilter').value;
+            
+            let filteredCustomers = customers;
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredCustomers = filteredCustomers.filter(customer => 
+                    customer.businessName.toLowerCase().includes(searchTerm) ||
+                    customer.contactName.toLowerCase().includes(searchTerm) ||
+                    customer.city.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Apply status filter
+            if (statusFilter) {
+                filteredCustomers = filteredCustomers.filter(customer => {
+                    const status = getServiceStatus(customer);
+                    return status.status === statusFilter;
+                });
+            }
+            
+            // Apply business type filter
+            if (businessTypeFilter) {
+                filteredCustomers = filteredCustomers.filter(customer => 
+                    customer.businessType === businessTypeFilter
+                );
+            }
+            
+            const container = document.getElementById('allCustomers');
+            if (filteredCustomers.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666; font-style: italic; padding: 40px;">No customers found matching your criteria.</p>';
+            } else {
+                container.innerHTML = filteredCustomers.map(createCustomerCard).join('');
+            }
+        }
+
+        // Add customer
+        document.getElementById('customerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newCustomer = {
+                id: Date.now(),
+                businessName: document.getElementById('businessName').value,
+                contactName: document.getElementById('contactName').value,
+                contactPhone: document.getElementById('contactPhone').value,
+                contactEmail: document.getElementById('contactEmail').value,
+                address: document.getElementById('address').value,
+                suiteNumber: document.getElementById('suiteNumber').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                zipCode: document.getElementById('zipCode').value,
+                businessType: document.getElementById('businessType').value,
+                serviceFrequency: document.getElementById('serviceFrequency').value,
+                startDate: document.getElementById('startDate').value,
+                lastService: document.getElementById('lastService').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            customers.push(newCustomer);
+            localStorage.setItem('hoodCustomers', JSON.stringify(customers));
+            
+            alert('Customer added successfully!');
+            clearForm();
+            showTab('customers');
+        });
+
+        // Clear form
+        function clearForm() {
+            document.getElementById('customerForm').reset();
+        }
+
+        // Mark customer as serviced
+        function markServiced(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (customer) {
+                customer.lastService = new Date().toISOString().split('T')[0];
+                localStorage.setItem('hoodCustomers', JSON.stringify(customers));
+                updateDashboard();
+                displayAllCustomers();
+                alert('Customer marked as serviced!');
+            }
+        }
+
+        // Delete customer
+        function deleteCustomer(customerId) {
+            if (confirm('Are you sure you want to delete this customer?')) {
+                customers = customers.filter(c => c.id !== customerId);
+                localStorage.setItem('hoodCustomers', JSON.stringify(customers));
+                updateDashboard();
+                displayAllCustomers();
+                alert('Customer deleted successfully!');
+            }
+        }
+
+        // Edit customer (simplified - opens prompt)
+        function editCustomer(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (customer) {
+                // Populate form and switch to add customer tab
+                document.getElementById('businessName').value = customer.businessName;
+                document.getElementById('contactName').value = customer.contactName;
+                document.getElementById('contactPhone').value = customer.contactPhone;
+                document.getElementById('contactEmail').value = customer.contactEmail || '';
+                document.getElementById('address').value = customer.address;
+                document.getElementById('suiteNumber').value = customer.suiteNumber || '';
+                document.getElementById('city').value = customer.city;
+                document.getElementById('state').value = customer.state;
+                document.getElementById('zipCode').value = customer.zipCode;
+                document.getElementById('businessType').value = customer.businessType;
+                document.getElementById('serviceFrequency').value = customer.serviceFrequency;
+                document.getElementById('startDate').value = customer.startDate;
+                document.getElementById('lastService').value = customer.lastService || '';
+                document.getElementById('notes').value = customer.notes || '';
+                
+                // Delete the old customer
+                customers = customers.filter(c => c.id !== customerId);
+                localStorage.setItem('hoodCustomers', JSON.stringify(customers));
+                
+                showTab('add-customer');
+                alert('Customer loaded for editing. Make your changes and click "Add Customer" to save.');
+            }
+        }
+
+        // Add event listeners for filters
+        document.getElementById('searchInput').addEventListener('input', displayAllCustomers);
+        document.getElementById('statusFilter').addEventListener('change', displayAllCustomers);
+        document.getElementById('businessTypeFilter').addEventListener('change', displayAllCustomers);
+
+        // Initialize dashboard on load
+        updateDashboard();
+    </script>
+</body>
+</html>
