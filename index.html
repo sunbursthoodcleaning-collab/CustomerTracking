@@ -884,6 +884,46 @@
                                 </select>
                             </div>
                         </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="totalHoodFans">Total Hood Fans</label>
+                                <input type="number" id="totalHoodFans" min="0" max="50" placeholder="Number of hood fans">
+                            </div>
+                            <div class="form-group">
+                                <label for="totalHoodFilters">Total Hood Filters</label>
+                                <input type="number" id="totalHoodFilters" min="0" max="200" placeholder="Number of hood filters">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="buildingStories">Building Stories</label>
+                                <select id="buildingStories">
+                                    <option value="">Select Stories</option>
+                                    <option value="1">1 Story</option>
+                                    <option value="2">2 Stories</option>
+                                    <option value="3">3 Stories</option>
+                                    <option value="4-5">4-5 Stories</option>
+                                    <option value="6-10">6-10 Stories</option>
+                                    <option value="11-20">11-20 Stories</option>
+                                    <option value="21+">21+ Stories (High-Rise)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cleaningDifficulty">Cleaning Difficulty Rating</label>
+                                <select id="cleaningDifficulty">
+                                    <option value="">Select Difficulty</option>
+                                    <option value="ok-pass">✅ OK/Pass - Clean & Well Maintained</option>
+                                    <option value="light">🟡 Light - Minor Buildup</option>
+                                    <option value="medium">🟠 Medium - Moderate Buildup</option>
+                                    <option value="heavy">🔴 Heavy - Significant Buildup</option>
+                                    <option value="obscene">⚠️ Obscene - Health Hazard Level</option>
+                                    <option value="should-close">🚨 Should Be Closed - Extreme Violation</option>
+                                </select>
+                            </div>
+                        </div>
+                        
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="serviceFrequency">Service Frequency *</label>
@@ -899,6 +939,58 @@
                             </div>
                             <div class="form-group">
                                 <!-- Empty for now, can add more fields later -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2>Service Scheduling Preferences</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="preferredTimeOfDay">Preferred Time of Day</label>
+                                <select id="preferredTimeOfDay">
+                                    <option value="">Select Preferred Time</option>
+                                    <option value="early-morning">Early Morning (5:00 AM - 8:00 AM)</option>
+                                    <option value="morning">Morning (8:00 AM - 12:00 PM)</option>
+                                    <option value="afternoon">Afternoon (12:00 PM - 5:00 PM)</option>
+                                    <option value="evening">Evening (5:00 PM - 10:00 PM)</option>
+                                    <option value="night">Night (10:00 PM - 2:00 AM)</option>
+                                    <option value="overnight">Overnight (2:00 AM - 5:00 AM)</option>
+                                    <option value="anytime">Anytime (Flexible)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="preferredDays">Preferred Days of Week</label>
+                                <select id="preferredDays">
+                                    <option value="">Select Preferred Days</option>
+                                    <option value="monday-friday">Monday - Friday (Weekdays)</option>
+                                    <option value="saturday-sunday">Saturday - Sunday (Weekends)</option>
+                                    <option value="monday-wednesday">Monday - Wednesday</option>
+                                    <option value="thursday-sunday">Thursday - Sunday</option>
+                                    <option value="specific-day">Specific Day Only</option>
+                                    <option value="any-day">Any Day (Flexible)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="timeFlexibility">Time Flexibility</label>
+                                <select id="timeFlexibility">
+                                    <option value="">Select Flexibility</option>
+                                    <option value="rigid-time">⏰ Rigid - Must be exact time</option>
+                                    <option value="flexible-time">🕒 Flexible - Can adjust time by 2-3 hours</option>
+                                    <option value="very-flexible-time">⏳ Very Flexible - Any time works</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dayFlexibility">Day Flexibility</label>
+                                <select id="dayFlexibility">
+                                    <option value="">Select Flexibility</option>
+                                    <option value="rigid-day">📅 Rigid - Must be specific day</option>
+                                    <option value="flexible-day">📆 Flexible - Can adjust by 1-2 days</option>
+                                    <option value="very-flexible-day">🗓️ Very Flexible - Any day works</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -1067,6 +1159,31 @@
             return type.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
         }
 
+        function getDifficultyInfo(difficulty) {
+            const difficultyMap = {
+                'ok-pass': { icon: '✅', label: 'OK/Pass', color: '#28a745' },
+                'light': { icon: '🟡', label: 'Light', color: '#ffc107' },
+                'medium': { icon: '🟠', label: 'Medium', color: '#fd7e14' },
+                'heavy': { icon: '🔴', label: 'Heavy', color: '#dc3545' },
+                'obscene': { icon: '⚠️', label: 'Obscene', color: '#6f42c1' },
+                'should-close': { icon: '🚨', label: 'Should Close', color: '#e83e8c' }
+            };
+            return difficultyMap[difficulty] || { icon: '❓', label: 'Unknown', color: '#6c757d' };
+        }
+
+        function getTimeInfo(timeOfDay) {
+            const timeMap = {
+                'early-morning': '🌅 Early Morning (5-8 AM)',
+                'morning': '🌄 Morning (8 AM-12 PM)',
+                'afternoon': '☀️ Afternoon (12-5 PM)',
+                'evening': '🌇 Evening (5-10 PM)',
+                'night': '🌃 Night (10 PM-2 AM)',
+                'overnight': '🌙 Overnight (2-5 AM)',
+                'anytime': '⏰ Anytime'
+            };
+            return timeMap[timeOfDay] || 'Not specified';
+        }
+
         function createCustomerCard(customer) {
             const status = getServiceStatus(customer);
             const serviceLength = getServiceLength(customer.start_date);
@@ -1102,7 +1219,13 @@
                         <p><strong>🏙️ City:</strong> ${customer.city}, ${customer.state} ${customer.zip_code}</p>
                         <p><strong>🏪 Structure:</strong> ${formatBusinessType(customer.business_type)}</p>
                         ${customer.cuisine_type ? `<p><strong>🍽️ Cuisine:</strong> ${formatBusinessType(customer.cuisine_type)}</p>` : ''}
+                        ${customer.total_hood_fans ? `<p><strong>🌀 Hood Fans:</strong> ${customer.total_hood_fans}</p>` : ''}
+                        ${customer.total_hood_filters ? `<p><strong>🔲 Hood Filters:</strong> ${customer.total_hood_filters}</p>` : ''}
+                        ${customer.building_stories ? `<p><strong>🏢 Building:</strong> ${customer.building_stories} ${customer.building_stories === '1' ? 'Story' : 'Stories'}</p>` : ''}
+                        ${customer.cleaning_difficulty ? `<p><strong>📊 Difficulty:</strong> <span style="color: ${getDifficultyInfo(customer.cleaning_difficulty).color}">${getDifficultyInfo(customer.cleaning_difficulty).icon} ${getDifficultyInfo(customer.cleaning_difficulty).label}</span></p>` : ''}
                         <p><strong>🔄 Frequency:</strong> ${formatBusinessType(customer.service_frequency)}</p>
+                        ${customer.preferred_time_of_day ? `<p><strong>⏰ Preferred Time:</strong> ${getTimeInfo(customer.preferred_time_of_day)}</p>` : ''}
+                        ${customer.preferred_days ? `<p><strong>📅 Preferred Days:</strong> ${formatBusinessType(customer.preferred_days)}</p>` : ''}
                         <p><strong>⏱️ Customer Since:</strong> ${serviceLength}</p>
                         ${customer.last_service ? `<p><strong>🧽 Last Service:</strong> ${new Date(customer.last_service).toLocaleDateString()}</p>` : ''}
                         ${nextServiceDate ? `<p><strong>📅 Next Service Due:</strong> ${nextServiceDate}</p>` : ''}
@@ -1279,7 +1402,15 @@
                     zip_code: document.getElementById('zipCode').value.trim(),
                     business_type: document.getElementById('businessType').value,
                     cuisine_type: document.getElementById('cuisineType').value || null,
+                    total_hood_fans: document.getElementById('totalHoodFans').value || null,
+                    total_hood_filters: document.getElementById('totalHoodFilters').value || null,
+                    building_stories: document.getElementById('buildingStories').value || null,
+                    cleaning_difficulty: document.getElementById('cleaningDifficulty').value || null,
                     service_frequency: document.getElementById('serviceFrequency').value,
+                    preferred_time_of_day: document.getElementById('preferredTimeOfDay').value || null,
+                    preferred_days: document.getElementById('preferredDays').value || null,
+                    time_flexibility: document.getElementById('timeFlexibility').value || null,
+                    day_flexibility: document.getElementById('dayFlexibility').value || null,
                     start_date: document.getElementById('startDate').value,
                     last_service: document.getElementById('lastService').value || null,
                     notes: document.getElementById('notes').value.trim() || null
@@ -1332,7 +1463,15 @@
             document.getElementById('zipCode').value = '';
             document.getElementById('businessType').value = '';
             document.getElementById('cuisineType').value = '';
+            document.getElementById('totalHoodFans').value = '';
+            document.getElementById('totalHoodFilters').value = '';
+            document.getElementById('buildingStories').value = '';
+            document.getElementById('cleaningDifficulty').value = '';
             document.getElementById('serviceFrequency').value = '';
+            document.getElementById('preferredTimeOfDay').value = '';
+            document.getElementById('preferredDays').value = '';
+            document.getElementById('timeFlexibility').value = '';
+            document.getElementById('dayFlexibility').value = '';
             document.getElementById('startDate').value = '';
             document.getElementById('lastService').value = '';
             document.getElementById('notes').value = '';
@@ -1373,7 +1512,15 @@
             document.getElementById('zipCode').value = customer.zip_code || '';
             document.getElementById('businessType').value = customer.business_type || '';
             document.getElementById('cuisineType').value = customer.cuisine_type || '';
+            document.getElementById('totalHoodFans').value = customer.total_hood_fans || '';
+            document.getElementById('totalHoodFilters').value = customer.total_hood_filters || '';
+            document.getElementById('buildingStories').value = customer.building_stories || '';
+            document.getElementById('cleaningDifficulty').value = customer.cleaning_difficulty || '';
             document.getElementById('serviceFrequency').value = customer.service_frequency || '';
+            document.getElementById('preferredTimeOfDay').value = customer.preferred_time_of_day || '';
+            document.getElementById('preferredDays').value = customer.preferred_days || '';
+            document.getElementById('timeFlexibility').value = customer.time_flexibility || '';
+            document.getElementById('dayFlexibility').value = customer.day_flexibility || '';
             document.getElementById('startDate').value = customer.start_date || '';
             document.getElementById('lastService').value = customer.last_service || '';
             document.getElementById('notes').value = customer.notes || '';
