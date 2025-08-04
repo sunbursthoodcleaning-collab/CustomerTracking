@@ -897,83 +897,14 @@
             return zipCode;
         }
 
-        function initDemoMode() {
-            console.log('Starting in demo mode...');
-            customers = [
-                {
-                    id: 1,
-                    business_name: "Tony's Italian Kitchen",
-                    contact_name: "Tony Rossi",
-                    contact_phone: "(305) 555-0123",
-                    contact_email: "tony@tonysitalian.com",
-                    address: "456 Ocean Drive",
-                    suite_number: null,
-                    city: "Miami Beach",
-                    state: "FL",
-                    zip_code: "33139",
-                    business_type: "casual-dining",
-                    service_frequency: "monthly",
-                    start_date: "2023-06-01",
-                    last_service: "2025-01-15",
-                    notes: "Access through back alley, key code 1234"
-                },
-                {
-                    id: 2,
-                    business_name: "Burger Palace Express",
-                    contact_name: "Sarah Johnson",
-                    contact_phone: "(305) 555-0456",
-                    contact_email: "sarah@burgerpalace.com",
-                    address: "789 Collins Ave",
-                    suite_number: "Suite 2B",
-                    city: "Miami Beach",
-                    state: "FL",
-                    zip_code: "33141",
-                    business_type: "fast-food",
-                    service_frequency: "monthly",
-                    start_date: "2024-03-15",
-                    last_service: "2024-12-20",
-                    notes: "Very busy location, prefer early morning service"
-                },
-                {
-                    id: 3,
-                    business_name: "Ocean View Hotel Restaurant",
-                    contact_name: "Michael Chen",
-                    contact_phone: "(305) 555-0789",
-                    contact_email: "mchen@oceanviewhotel.com",
-                    address: "1200 Biscayne Blvd",
-                    suite_number: "Level 3",
-                    city: "Miami",
-                    state: "FL",
-                    zip_code: "33132",
-                    business_type: "hotel",
-                    service_frequency: "every-2-months",
-                    start_date: "2022-08-01",
-                    last_service: "2024-11-05",
-                    notes: "Large commercial kitchen, requires 4-hour service window"
-                },
-                {
-                    id: 4,
-                    business_name: "Sunset Elementary Cafeteria",
-                    contact_name: "Lisa Martinez",
-                    contact_phone: "(305) 555-0321",
-                    contact_email: "lmartinez@sunsetelem.edu",
-                    address: "345 SW 8th Street",
-                    suite_number: null,
-                    city: "Miami",
-                    state: "FL",
-                    zip_code: "33135",
-                    business_type: "school",
-                    service_frequency: "quarterly",
-                    start_date: "2023-01-10",
-                    last_service: "2024-10-15",
-                    notes: "School schedule - service during school breaks only"
-                }
-            ];
+        function initCleanMode() {
+            console.log('Starting fresh customer management system...');
+            customers = [];
             
             updateDashboard();
             displayAllCustomers();
             
-            showNotification('Demo mode active - All features working! 🎉', 'success');
+            showNotification('Welcome to SUNBURST Hood Cleaning! Ready to add your first customer! 🎉', 'success');
         }
 
         function getDaysUntilNextService(lastServiceDate, frequency) {
@@ -1388,7 +1319,7 @@
 
         function initializeApp() {
             console.log('Initializing Hood Cleaning App...');
-            initDemoMode();
+            initCleanMode();
             console.log('Application initialization complete');
         }
 
