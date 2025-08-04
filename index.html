@@ -37,6 +37,154 @@
             color: var(--dark-blue);
         }
 
+        /* Login Screen Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-heavy);
+            padding: 50px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.05) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) rotate(180deg); }
+        }
+
+        .login-header {
+            position: relative;
+            z-index: 2;
+            margin-bottom: 40px;
+        }
+
+        .login-header h1 {
+            font-size: 2.2em;
+            color: var(--primary-orange);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .login-header p {
+            color: var(--text-gray);
+            font-size: 1.1em;
+        }
+
+        .login-form {
+            position: relative;
+            z-index: 2;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-blue);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid var(--border-gray);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background: white;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-light);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: var(--transition);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .login-btn:hover::before {
+            left: 100%;
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px 18px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--danger-red);
+            font-weight: 500;
+        }
+
+        /* Main App Styles (same as before) */
         .container {
             max-width: 1400px;
             margin: 0 auto;
@@ -102,11 +250,6 @@
             animation: float 6s ease-in-out infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
-            50% { transform: translate(-50%, -50%) rotate(180deg); }
-        }
-
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
@@ -120,6 +263,26 @@
             font-size: 1.2em;
             position: relative;
             z-index: 2;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            z-index: 3;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
         }
 
         .notification {
@@ -604,9 +767,14 @@
             line-height: 1.6;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
             body {
                 padding: 10px;
+            }
+
+            .login-card {
+                padding: 30px;
             }
 
             .header {
@@ -668,198 +836,301 @@
                 margin-bottom: 15px;
             }
         }
+
+        /* Hide main app initially */
+        .main-app {
+            display: none;
+        }
+
+        .main-app.authenticated {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>🏢 SUNBURST Hood Cleaning</h1>
+                <p>Customer Management System</p>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+                <div class="form-group">
+                    <label for="adminPin">Admin PIN</label>
+                    <input type="tel" id="adminPin" required placeholder="Enter 6-digit PIN" maxlength="6" pattern="[0-9]{6}" title="Please enter a valid 6-digit PIN">
+                </div>
+                <button type="submit" class="login-btn" id="loginBtn">
+                    🔐 Access Dashboard
+                </button>
+            </form>
+        </div>
     </div>
 
-    <div class="notification" id="notification"></div>
-
-    <div class="container">
-        <div class="header">
-            <h1>🏢 SUNBURST Hood Cleaning, LLC</h1>
-            <p>Professional Customer Management System</p>
+    <!-- Main Application -->
+    <div class="main-app" id="mainApp">
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
         </div>
 
-        <div class="main-content">
-            <div class="tabs">
-                <button class="tab active" data-tab="dashboard">📊 Dashboard</button>
-                <button class="tab" data-tab="customers">👥 All Customers</button>
-                <button class="tab" data-tab="add-customer">➕ Add Customer</button>
+        <div class="notification" id="notification"></div>
+
+        <div class="container">
+            <div class="header">
+                <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+                <h1>🏢 SUNBURST Hood Cleaning, LLC</h1>
+                <p>Professional Customer Management System</p>
             </div>
 
-            <!-- Dashboard Tab -->
-            <div id="dashboard" class="tab-content active">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalCustomers">0</div>
-                        <div class="stat-label">Total Customers</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="dueSoon">0</div>
-                        <div class="stat-label">Due in 30 Days</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="dueNow">0</div>
-                        <div class="stat-label">Due This Month</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="overdue">0</div>
-                        <div class="stat-label">Overdue</div>
-                    </div>
+            <div class="main-content">
+                <div class="tabs">
+                    <button class="tab active" data-tab="dashboard">📊 Dashboard</button>
+                    <button class="tab" data-tab="customers">👥 All Customers</button>
+                    <button class="tab" data-tab="add-customer">➕ Add Customer</button>
                 </div>
 
-                <h2 style="margin-bottom: 25px; color: var(--dark-blue); font-size: 1.8em;">🚨 Urgent Attention Needed</h2>
-                <div id="urgentCustomers" class="customer-grid"></div>
-            </div>
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalCustomers">0</div>
+                            <div class="stat-label">Total Customers</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="dueSoon">0</div>
+                            <div class="stat-label">Due in 30 Days</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="dueNow">0</div>
+                            <div class="stat-label">Due This Month</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="overdue">0</div>
+                            <div class="stat-label">Overdue</div>
+                        </div>
+                    </div>
 
-            <!-- All Customers Tab -->
-            <div id="customers" class="tab-content">
-                <div class="search-filter">
-                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search customers by name, business, or city...">
-                    <select class="filter-select" id="statusFilter">
-                        <option value="">All Status</option>
-                        <option value="green">✅ Current</option>
-                        <option value="yellow">⚠️ Due Soon</option>
-                        <option value="red">🚨 Overdue</option>
-                    </select>
-                    <select class="filter-select" id="businessTypeFilter">
-                        <option value="">All Business Types</option>
-                        <option value="mom-pop">Mom & Pop Restaurant</option>
-                        <option value="fast-food">Fast Food Chain</option>
-                        <option value="casual-dining">Casual Dining</option>
-                        <option value="fine-dining">Fine Dining</option>
-                        <option value="hotel">Hotel/Resort</option>
-                        <option value="school">School</option>
-                        <option value="other">Other</option>
-                    </select>
+                    <h2 style="margin-bottom: 25px; color: var(--dark-blue); font-size: 1.8em;">🚨 Urgent Attention Needed</h2>
+                    <div id="urgentCustomers" class="customer-grid"></div>
                 </div>
-                <div id="allCustomers" class="customer-grid"></div>
-            </div>
 
-            <!-- Add Customer Tab -->
-            <div id="add-customer" class="tab-content">
-                <form id="customerForm">
-                    <div class="form-section">
-                        <h2>Basic Information</h2>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="businessName">Business Name *</label>
-                                <input type="text" id="businessName" required placeholder="Enter business name">
-                            </div>
-                            <div class="form-group">
-                                <label for="contactName">Contact Name *</label>
-                                <input type="text" id="contactName" required placeholder="Enter contact person name">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="contactPhone">Phone Number *</label>
-                                <input type="tel" id="contactPhone" required placeholder="(305) 123-4567" pattern="[\(\)\s\-0-9]{10,17}" minlength="10" maxlength="17" title="Please enter a valid phone number">
-                            </div>
-                            <div class="form-group">
-                                <label for="contactEmail">Email Address</label>
-                                <input type="email" id="contactEmail" placeholder="contact@business.com">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Street Address *</label>
-                            <input type="text" id="address" required placeholder="123 Main Street">
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="suiteNumber">Suite/Unit Number</label>
-                                <input type="text" id="suiteNumber" placeholder="Suite 100, Unit B, etc.">
-                            </div>
-                            <div class="form-group">
-                                <label for="city">City *</label>
-                                <input type="text" id="city" required placeholder="Enter city">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="state">State *</label>
-                                <input type="text" id="state" required value="FL" readonly style="background-color: #f8f9fa; color: #666;">
-                            </div>
-                            <div class="form-group">
-                                <label for="zipCode">ZIP Code *</label>
-                                <input type="tel" id="zipCode" required placeholder="33139" pattern="[0-9]{5}(-[0-9]{4})?" minlength="5" maxlength="10" title="Please enter a valid ZIP code (12345 or 12345-6789)">
-                            </div>
-                        </div>
+                <!-- All Customers Tab -->
+                <div id="customers" class="tab-content">
+                    <div class="search-filter">
+                        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search customers by name, business, or city...">
+                        <select class="filter-select" id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="green">✅ Current</option>
+                            <option value="yellow">⚠️ Due Soon</option>
+                            <option value="red">🚨 Overdue</option>
+                        </select>
+                        <select class="filter-select" id="businessTypeFilter">
+                            <option value="">All Business Types</option>
+                            <option value="mom-pop">Mom & Pop Restaurant</option>
+                            <option value="fast-food">Fast Food Chain</option>
+                            <option value="casual-dining">Casual Dining</option>
+                            <option value="fine-dining">Fine Dining</option>
+                            <option value="hotel">Hotel/Resort</option>
+                            <option value="school">School</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
+                    <div id="allCustomers" class="customer-grid"></div>
+                </div>
 
-                    <div class="form-section">
-                        <h2>Business Details</h2>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="businessType">Business Type *</label>
-                                <select id="businessType" required>
-                                    <option value="">Select Business Type</option>
-                                    <option value="mom-pop">Mom & Pop Restaurant</option>
-                                    <option value="fast-food">Fast Food Chain</option>
-                                    <option value="casual-dining">Casual Dining</option>
-                                    <option value="fine-dining">Fine Dining</option>
-                                    <option value="food-truck">Food Truck/Trailer</option>
-                                    <option value="hotel">Hotel/Resort</option>
-                                    <option value="hospital">Hospital/Medical</option>
-                                    <option value="church">Church/Religious</option>
-                                    <option value="school">School/Educational</option>
-                                    <option value="corporate">Corporate Cafeteria</option>
-                                    <option value="other">Other</option>
-                                </select>
+                <!-- Add Customer Tab -->
+                <div id="add-customer" class="tab-content">
+                    <form id="customerForm">
+                        <div class="form-section">
+                            <h2>Basic Information</h2>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="businessName">Business Name *</label>
+                                    <input type="text" id="businessName" required placeholder="Enter business name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactName">Contact Name *</label>
+                                    <input type="text" id="contactName" required placeholder="Enter contact person name">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactPhone">Phone Number *</label>
+                                    <input type="tel" id="contactPhone" required placeholder="(305) 123-4567" pattern="[\(\)\s\-0-9]{10,17}" minlength="10" maxlength="17" title="Please enter a valid phone number">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactEmail">Email Address</label>
+                                    <input type="email" id="contactEmail" placeholder="contact@business.com">
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="serviceFrequency">Service Frequency *</label>
-                                <select id="serviceFrequency" required>
-                                    <option value="">Select Frequency</option>
-                                    <option value="monthly">Every Month</option>
-                                    <option value="every-2-months">Every 2 Months</option>
-                                    <option value="quarterly">Every 3 Months</option>
-                                    <option value="every-4-months">Every 4 Months</option>
-                                    <option value="semi-annual">Every 6 Months</option>
-                                    <option value="annual">Once Per Year</option>
-                                </select>
+                                <label for="address">Street Address *</label>
+                                <input type="text" id="address" required placeholder="123 Main Street">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="suiteNumber">Suite/Unit Number</label>
+                                    <input type="text" id="suiteNumber" placeholder="Suite 100, Unit B, etc.">
+                                </div>
+                                <div class="form-group">
+                                    <label for="city">City *</label>
+                                    <input type="text" id="city" required placeholder="Enter city">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="state">State *</label>
+                                    <input type="text" id="state" required value="FL" readonly style="background-color: #f8f9fa; color: #666;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="zipCode">ZIP Code *</label>
+                                    <input type="tel" id="zipCode" required placeholder="33139" pattern="[0-9]{5}(-[0-9]{4})?" minlength="5" maxlength="10" title="Please enter a valid ZIP code (12345 or 12345-6789)">
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-section">
-                        <h2>Service History</h2>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="startDate">Service Start Date *</label>
-                                <input type="date" id="startDate" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="lastService">Last Service Date</label>
-                                <input type="date" id="lastService">
+                        <div class="form-section">
+                            <h2>Business Details</h2>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="businessType">Business Type *</label>
+                                    <select id="businessType" required>
+                                        <option value="">Select Business Type</option>
+                                        <option value="mom-pop">Mom & Pop Restaurant</option>
+                                        <option value="fast-food">Fast Food Chain</option>
+                                        <option value="casual-dining">Casual Dining</option>
+                                        <option value="fine-dining">Fine Dining</option>
+                                        <option value="food-truck">Food Truck/Trailer</option>
+                                        <option value="hotel">Hotel/Resort</option>
+                                        <option value="hospital">Hospital/Medical</option>
+                                        <option value="church">Church/Religious</option>
+                                        <option value="school">School/Educational</option>
+                                        <option value="corporate">Corporate Cafeteria</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="serviceFrequency">Service Frequency *</label>
+                                    <select id="serviceFrequency" required>
+                                        <option value="">Select Frequency</option>
+                                        <option value="monthly">Every Month</option>
+                                        <option value="every-2-months">Every 2 Months</option>
+                                        <option value="quarterly">Every 3 Months</option>
+                                        <option value="every-4-months">Every 4 Months</option>
+                                        <option value="semi-annual">Every 6 Months</option>
+                                        <option value="annual">Once Per Year</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="notes">Additional Notes</label>
-                            <textarea id="notes" placeholder="Special requirements, access details, equipment notes, etc."></textarea>
-                        </div>
-                    </div>
 
-                    <div style="text-align: center; margin-top: 40px;">
-                        <button type="submit" class="btn" id="submitBtn">💾 Save Customer</button>
-                        <button type="button" class="btn btn-secondary" id="clearBtn" style="margin-left: 20px;">🗑️ Clear Form</button>
-                    </div>
-                </form>
+                        <div class="form-section">
+                            <h2>Service History</h2>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="startDate">Service Start Date *</label>
+                                    <input type="date" id="startDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastService">Last Service Date</label>
+                                    <input type="date" id="lastService">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="notes">Additional Notes</label>
+                                <textarea id="notes" placeholder="Special requirements, access details, equipment notes, etc."></textarea>
+                            </div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 40px;">
+                            <button type="submit" class="btn" id="submitBtn">💾 Save Customer</button>
+                            <button type="button" class="btn btn-secondary" id="clearBtn" style="margin-left: 20px;">🗑️ Clear Form</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        let app;
+        // Authentication Configuration
+        const ADMIN_PIN = '123098'; // Change this to your desired PIN
+        const SESSION_KEY = 'sunburst_admin_session';
+
+        // Application variables
         let customers = [];
         let supabase = null;
         let currentEditingId = null;
         let isDemo = false;
 
+        // Authentication functions
+        function checkAuthentication() {
+            const session = sessionStorage.getItem(SESSION_KEY);
+            if (session === 'authenticated') {
+                showMainApp();
+                return true;
+            }
+            showLoginScreen();
+            return false;
+        }
+
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('mainApp').classList.remove('authenticated');
+        }
+
+        function showMainApp() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainApp').classList.add('authenticated');
+        }
+
+        function login(pin) {
+            if (pin === ADMIN_PIN) {
+                sessionStorage.setItem(SESSION_KEY, 'authenticated');
+                showMainApp();
+                showNotification('Welcome to SUNBURST Customer Management! 🎉', 'success');
+                initializeApp();
+                return true;
+            }
+            return false;
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                sessionStorage.removeItem(SESSION_KEY);
+                showLoginScreen();
+                showNotification('Logged out successfully', 'success');
+            }
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const pin = document.getElementById('adminPin').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            loginBtn.textContent = '🔐 Authenticating...';
+            loginBtn.disabled = true;
+            
+            setTimeout(() => {
+                if (login(pin)) {
+                    errorDiv.style.display = 'none';
+                } else {
+                    errorDiv.textContent = '❌ Invalid PIN. Please try again.';
+                    errorDiv.style.display = 'block';
+                    document.getElementById('adminPin').value = '';
+                }
+                
+                loginBtn.textContent = '🔐 Access Dashboard';
+                loginBtn.disabled = false;
+            }, 500);
+        });
+
+        // Utility functions
         function showLoading() {
             document.getElementById('loadingOverlay').classList.add('active');
         }
@@ -881,10 +1152,8 @@
 
         // Phone number formatting
         function formatPhoneNumber(value) {
-            // Remove all non-digits
             const phoneNumber = value.replace(/\D/g, '');
             
-            // Format as (XXX) XXX-XXXX
             if (phoneNumber.length >= 6) {
                 return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
             } else if (phoneNumber.length >= 3) {
@@ -894,12 +1163,9 @@
             }
         }
 
-        // ZIP code formatting
         function formatZipCode(value) {
-            // Remove all non-digits and hyphens
             const zipCode = value.replace(/[^\d-]/g, '');
             
-            // Format as XXXXX or XXXXX-XXXX
             if (zipCode.length > 5 && !zipCode.includes('-')) {
                 return `${zipCode.slice(0, 5)}-${zipCode.slice(5, 9)}`;
             }
@@ -1043,7 +1309,7 @@
             updateDashboard();
             displayAllCustomers();
             
-            showNotification('Demo mode active - Add real customers to test database features! 📊', 'warning');
+            showNotification('Demo mode active - Database connection unavailable 📊', 'warning');
         }
 
         function getDaysUntilNextService(lastServiceDate, frequency) {
@@ -1426,7 +1692,6 @@
             document.getElementById('customerForm').reset();
             currentEditingId = null;
             document.getElementById('submitBtn').textContent = '💾 Save Customer';
-            // Reset Florida as default state after form reset
             document.getElementById('state').value = 'FL';
         }
 
@@ -1451,130 +1716,3 @@
             } catch (error) {
                 console.error('Error updating customer:', error);
                 showNotification('Error updating customer. Please try again.', 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        function editCustomer(customerId) {
-            const customer = customers.find(c => c.id === customerId);
-            if (!customer) return;
-            
-            document.getElementById('businessName').value = customer.business_name || '';
-            document.getElementById('contactName').value = customer.contact_name || '';
-            document.getElementById('contactPhone').value = customer.contact_phone || '';
-            document.getElementById('contactEmail').value = customer.contact_email || '';
-            document.getElementById('address').value = customer.address || '';
-            document.getElementById('suiteNumber').value = customer.suite_number || '';
-            document.getElementById('city').value = customer.city || '';
-            document.getElementById('state').value = customer.state || 'FL';
-            document.getElementById('zipCode').value = customer.zip_code || '';
-            document.getElementById('businessType').value = customer.business_type || '';
-            document.getElementById('serviceFrequency').value = customer.service_frequency || '';
-            document.getElementById('startDate').value = customer.start_date || '';
-            document.getElementById('lastService').value = customer.last_service || '';
-            document.getElementById('notes').value = customer.notes || '';
-            
-            currentEditingId = customerId;
-            document.getElementById('submitBtn').textContent = '💾 Update Customer';
-            
-            showTab('add-customer');
-            showNotification('Customer loaded for editing', 'success');
-        }
-
-        function confirmDeleteCustomer(customerId) {
-            const customer = customers.find(c => c.id === customerId);
-            if (!customer) return;
-            
-            if (confirm(`Are you sure you want to delete ${customer.business_name}?\n\nThis action cannot be undone.`)) {
-                deleteCustomerById(customerId);
-            }
-        }
-
-        async function deleteCustomerById(customerId) {
-            try {
-                showLoading();
-                
-                if (isDemo) {
-                    customers = customers.filter(c => c.id !== customerId);
-                    updateDashboard();
-                    displayAllCustomers();
-                    showNotification('Customer deleted successfully! (Demo Mode)', 'success');
-                } else {
-                    await deleteCustomer(customerId);
-                    await loadCustomers();
-                    showNotification('Customer deleted successfully!', 'success');
-                }
-            } catch (error) {
-                console.error('Error deleting customer:', error);
-                showNotification('Error deleting customer. Please try again.', 'error');
-            } finally {
-                hideLoading();
-            }
-        }
-
-        async function initializeApp() {
-            showLoading();
-            
-            try {
-                console.log('Initializing Hood Cleaning App...');
-                
-                const supabaseConnected = await initSupabase();
-                
-                if (supabaseConnected) {
-                    await loadCustomers();
-                    console.log('Database mode active');
-                    showNotification('Connected to database successfully! 🎉', 'success');
-                } else {
-                    console.warn('Database connection failed, starting demo mode');
-                    initDemoMode();
-                }
-                
-                console.log('Application initialization complete');
-                
-            } catch (error) {
-                console.error('Critical initialization error:', error);
-                showNotification(`Critical error: ${error.message}`, 'error');
-                initDemoMode();
-            } finally {
-                hideLoading();
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Setup phone number formatting
-            const phoneInput = document.getElementById('contactPhone');
-            phoneInput.addEventListener('input', function(e) {
-                const formatted = formatPhoneNumber(e.target.value);
-                e.target.value = formatted;
-            });
-
-            // Setup ZIP code formatting
-            const zipInput = document.getElementById('zipCode');
-            zipInput.addEventListener('input', function(e) {
-                const formatted = formatZipCode(e.target.value);
-                e.target.value = formatted;
-            });
-
-            // Set Florida as default state
-            document.getElementById('state').value = 'FL';
-
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', (e) => {
-                    showTab(e.target.dataset.tab);
-                });
-            });
-
-            document.getElementById('customerForm').addEventListener('submit', handleFormSubmit);
-
-            document.getElementById('clearBtn').addEventListener('click', clearForm);
-
-            document.getElementById('searchInput').addEventListener('input', displayAllCustomers);
-            document.getElementById('statusFilter').addEventListener('change', displayAllCustomers);
-            document.getElementById('businessTypeFilter').addEventListener('change', displayAllCustomers);
-
-            initializeApp();
-        });
-    </script>
-</body>
-</html>
