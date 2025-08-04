@@ -1109,34 +1109,31 @@
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const pin = document.getElementById('adminPin').value.trim();
+            const pin = document.getElementById('adminPin').value;
             const errorDiv = document.getElementById('errorMessage');
             const loginBtn = document.getElementById('loginBtn');
-            
-            console.log('Entered PIN:', pin); // Debug log
-            console.log('Expected PIN:', ADMIN_PIN); // Debug log
             
             loginBtn.textContent = '🔐 Authenticating...';
             loginBtn.disabled = true;
             
-            setTimeout(() => {
-                if (pin === ADMIN_PIN) {
-                    console.log('PIN match - logging in'); // Debug log
-                    errorDiv.style.display = 'none';
-                    sessionStorage.setItem(SESSION_KEY, 'authenticated');
-                    showMainApp();
-                    showNotification('Welcome to SUNBURST Customer Management! 🎉', 'success');
-                    initializeApp();
-                } else {
-                    console.log('PIN mismatch'); // Debug log
-                    errorDiv.textContent = `❌ Invalid PIN. Please try again. (You entered: ${pin})`;
-                    errorDiv.style.display = 'block';
-                    document.getElementById('adminPin').value = '';
-                }
-                
-                loginBtn.textContent = '🔐 Access Dashboard';
-                loginBtn.disabled = false;
-            }, 500);
+            // Simple PIN check - no timeout, direct comparison
+            if (pin === '123098') {
+                // Success - login
+                errorDiv.style.display = 'none';
+                sessionStorage.setItem('sunburst_admin_session', 'authenticated');
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').classList.add('authenticated');
+                showNotification('Welcome to SUNBURST Customer Management! 🎉', 'success');
+                initializeApp();
+            } else {
+                // Failed - show error
+                errorDiv.textContent = `❌ Wrong PIN. Try: 123098 (You entered: "${pin}")`;
+                errorDiv.style.display = 'block';
+                document.getElementById('adminPin').value = '';
+            }
+            
+            loginBtn.textContent = '🔐 Access Dashboard';
+            loginBtn.disabled = false;
         });
 
         // Utility functions
